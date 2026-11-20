@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import { c, footer, isAddress, main, parseArgs, price, usd, age } from "../lib/core.js";
 import { assess, gather } from "../lib/assess.js";
+import { parseFailOn } from "../lib/cli.js";
 
 const HELP = `solana-rug-checker: rug pull scanner for Solana and pump.fun tokens
 
@@ -20,7 +21,7 @@ const ICON = { danger: c.red("✖"), warn: c.yellow("▲"), ok: c.green("✔") }
 main(async () => {
   const args = parseArgs(process.argv.slice(2), { booleans: ["json", "help"] });
   if (args.help || !args._.length) { console.log(HELP); process.exit(args.help ? 0 : 1); }
-  const failOn = Number(args["fail-on"]) || 60;
+  const failOn = parseFailOn(args["fail-on"]);
   const results = [];
   for (const mint of args._) {
     if (!isAddress(mint)) throw new Error(`"${mint}" is not a Solana address.`);
