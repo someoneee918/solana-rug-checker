@@ -72,6 +72,7 @@ Usage:
 Options:
   --json          Print the full result as JSON
   --fail-on <n>   Exit with code 2 when the risk score is n or higher (default 60)
+  --version       Show version
   --help          Show this help
 
 Risk score: 0 to 24 low, 25 to 59 caution, 60 to 100 high.

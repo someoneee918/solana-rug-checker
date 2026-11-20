@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import { readFileSync } from "node:fs";
 import { c, footer, isAddress, main, parseArgs, price, usd, age } from "../lib/core.js";
 import { assess, gather } from "../lib/assess.js";
 
@@ -10,6 +11,7 @@ Usage:
 Options:
   --json          Print the full result as JSON
   --fail-on <n>   Exit with code 2 when the risk score is n or higher (default 60)
+  --version       Show version
   --help          Show this help
 
 Risk score: 0 to 24 low, 25 to 59 caution, 60 to 100 high.
@@ -18,7 +20,12 @@ Risk score: 0 to 24 low, 25 to 59 caution, 60 to 100 high.
 const ICON = { danger: c.red("✖"), warn: c.yellow("▲"), ok: c.green("✔") };
 
 main(async () => {
-  const args = parseArgs(process.argv.slice(2), { booleans: ["json", "help"] });
+  const args = parseArgs(process.argv.slice(2), { booleans: ["json", "help", "version"] });
+  if (args.version) {
+    const pkg = JSON.parse(readFileSync(new URL("../package.json", import.meta.url), "utf8"));
+    console.log(pkg.version);
+    process.exit(0);
+  }
   if (args.help || !args._.length) { console.log(HELP); process.exit(args.help ? 0 : 1); }
   const failOn = Number(args["fail-on"]) || 60;
   const results = [];
